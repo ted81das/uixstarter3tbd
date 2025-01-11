@@ -1,0 +1,107 @@
+# BEGIN HMWP_RULES
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule ^([_0-9a-zA-Z-]+/)?ajax$ /wp-admin/admin-ajax.php [QSA,L]
+RewriteRule ^([_0-9a-zA-Z-]+/)?admindash/(.*) /wp-admin/$2 [QSA,L]
+RewriteRule ^([_0-9a-zA-Z-]+/)?mysignin$ /wp-login.php [QSA,L]
+RewriteRule ^([_0-9a-zA-Z-]+/)?mysignin/(.*) /wp-login.php$2 [QSA,L]
+RewriteRule ^([_0-9a-zA-Z-]+/)?lostpassword$ /wp-login.php?action=lostpassword [QSA,L]
+RewriteRule ^([_0-9a-zA-Z-]+/)?register$ /wp-login.php?action=register [QSA,L]
+RewriteRule ^([_0-9a-zA-Z-]+/)?disconnect$ /wp-login.php?action=logout [QSA,L]
+RewriteRule ^([_0-9a-zA-Z-]+/)?core/modules/121457d304/(.*) /wp-content/plugins/query-monitor/$2 [QSA,L]
+RewriteRule ^([_0-9a-zA-Z-]+/)?core/modules/e32b144910/(.*) /wp-content/plugins/astra-addon/$2 [QSA,L]
+RewriteRule ^([_0-9a-zA-Z-]+/)?core/modules/30bdf52f2e/(.*) /wp-content/plugins/astra-pro-sites/$2 [QSA,L]
+RewriteRule ^([_0-9a-zA-Z-]+/)?core/modules/da66b843be/(.*) /wp-content/plugins/branda-white-labeling/$2 [QSA,L]
+RewriteRule ^([_0-9a-zA-Z-]+/)?core/modules/485c463dd9/(.*) /wp-content/plugins/ewww-image-optimizer/$2 [QSA,L]
+RewriteRule ^([_0-9a-zA-Z-]+/)?core/modules/d0f4711431/(.*) /wp-content/plugins/hide-my-wp/$2 [QSA,L]
+RewriteRule ^([_0-9a-zA-Z-]+/)?core/modules/d9a7a320d8/(.*) /wp-content/plugins/ultimate-addons-for-gutenberg/$2 [QSA,L]
+RewriteRule ^([_0-9a-zA-Z-]+/)?core/modules/(.*) /wp-content/plugins/$2 [QSA,L]
+RewriteRule ^([_0-9a-zA-Z-]+/)?core/views/9dbb40d076/design.css$ /wp-content/themes/astra/style.css [QSA,L]
+RewriteRule ^([_0-9a-zA-Z-]+/)?core/views/9dbb40d076/(.*) /wp-content/themes/astra/$2 [QSA,L]
+RewriteRule ^([_0-9a-zA-Z-]+/)?core/views/(.*) /wp-content/themes/$2 [QSA,L]
+RewriteRule ^([_0-9a-zA-Z-]+/)?core/(.*) /wp-content/$2 [QSA,L]
+RewriteRule ^([_0-9a-zA-Z-]+/)?lib/(.*) /wp-includes/$2 [QSA,L]
+RewriteRule ^([_0-9a-zA-Z-]+/)?comments/(.*) /wp-comments-post.php$2 [QSA,L]
+RewriteRule ^([_0-9a-zA-Z-]+/)?writer/(.*) /author/$2 [QSA,L]
+</IfModule>
+
+
+# END HMWP_RULES
+# BEGIN HMWP_VULNERABILITY
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteCond %{REQUEST_URI} !/wp-admin [NC]
+RewriteCond %{QUERY_STRING} ^author=\d+ [NC]
+RewriteRule ^(.*)$ - [L,R=404]
+</IfModule>
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteCond %{REMOTE_ADDR} ^35.214.130.87$ [NC,OR]
+RewriteCond %{REMOTE_ADDR} ^192.185.4.40$ [NC,OR]
+RewriteCond %{REMOTE_ADDR} ^15.235.50.223$ [NC,OR]
+RewriteCond %{REMOTE_ADDR} ^172.105.48.130$ [NC,OR]
+RewriteCond %{REMOTE_ADDR} ^167.99.233.123$ [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} (wpthemedetector|builtwith|isitwp|wapalyzer|mShots|WhatCMS|gochyu|wpdetector|scanwp) [NC]
+RewriteRule ^(.*)$ - [L,R=404]
+</IfModule>
+
+<IfModule mod_headers.c>
+Header always unset x-powered-by
+Header always unset server
+ServerSignature Off
+</IfModule>
+
+<IfModule mod_headers.c>
+Header set Strict-Transport-Security "max-age=15768000;includeSubdomains"
+Header set Content-Security-Policy "object-src 'none'"
+Header set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+RewriteCond %{HTTP:Cookie} !(wordpress_logged_in_|hmwp_logged_in_) [NC]
+RewriteCond %{THE_REQUEST} /wp-content/uploads/[^\.]+.[^\.]+ [NC]
+RewriteRule ^([_0-9a-zA-Z-]+/)?wp-content/uploads/(.*)$ /storage/$2  [L,R=301]
+</IfModule>
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+RewriteCond %{HTTP:Cookie} !(wordpress_logged_in_|hmwp_logged_in_) [NC]
+RewriteCond %{REQUEST_URI} ^/wp-content/?$ [NC,OR]
+RewriteCond %{REQUEST_URI} ^/wp-content/[^\.]+/?$ [NC,OR]
+RewriteCond %{THE_REQUEST} /wp-includes/?$ [NC,OR]
+RewriteCond %{THE_REQUEST} /wp-content/plugins/[^\.]+(\.php|\.htm|\.html|\.rtf|\.rtx|\.txt|\.lock) [NC,OR]
+RewriteCond %{THE_REQUEST} /wp-content/themes/[^\.]+(\.php|\.htm|\.html|\.rtf|\.rtx|\.txt|\.lock)    [NC,OR]
+RewriteCond %{THE_REQUEST} /wp-content/uploads/[^\.]+(\.php|\.htm|\.html|\.rtf|\.rtx|\.txt|\.lock) [NC,OR]
+RewriteCond %{THE_REQUEST} /wp-includes/[^\.]+(\.php|\.htm|\.html|\.rtf|\.rtx|\.txt|\.lock) [NC,OR]
+RewriteCond %{THE_REQUEST} /([_0-9a-zA-Z-]+/)?(wp-config-sample\.php|readme\.html|readme\.txt|install\.php|license\.txt|php\.ini|bb-config\.php|error_log|debug\.log) [NC]
+RewriteRule ^(.*)$ - [L,R=404]
+</IfModule>
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteCond %{REQUEST_URI} /(wp-config-sample\.php|readme\.html|readme\.txt|install\.php|license\.txt|php\.ini|bb-config\.php|error_log|debug\.log) [NC]
+RewriteRule ^(.*)$ - [L,R=404]
+</IfModule>
+
+
+# END HMWP_VULNERABILITY
+# BEGIN WordPress
+# The directives (lines) between "BEGIN WordPress" and "END WordPress" are
+# dynamically generated, and should only be modified via Wowmattic filters.
+# Any changes to the directives between these markers will be overwritten.
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>
+
+# END WordPress
